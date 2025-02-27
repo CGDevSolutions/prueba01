@@ -90,6 +90,11 @@
             background-color: #eee;
             margin: 20px 0;
         }
+        .recibo img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -110,7 +115,10 @@
 
     <!-- Estructura del recibo -->
     <div class="recibo" id="recibo" style="display: none;">
+        <!-- Imagen en el recibo -->
+        <img src="Horizontal_V1.png" alt="Logo" id="imagenRecibo" style="width: 150px;">
         <h2>CREDIEXPRESS</h2>
+        <p><strong>Fecha:</strong> <span id="fecha"></span></p>
         <p><strong>Nombre del Cliente:</strong> <span id="nombreCliente"></span></p>
         <p><strong>Saldo Anterior:</strong> $<span id="saldoAnterior"></span></p>
         <p><strong>Abono:</strong> $<span id="abono"></span></p>
@@ -141,42 +149,58 @@
 
             // Formatear la fecha actual (YYYY-MM-DD)
             const fechaActual = new Date();
-            const fechaFormateada = fechaActual.toISOString().split('T')[0];
+            const fechaFormateada = fechaActual.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
 
             // Crear nombre del archivo con nombre y fecha
-            const nombreArchivo = `Recibo_${nombre.replace(/ /g, "_")}_${fechaFormateada}.pdf`;
+            const nombreArchivo = `Recibo_${nombre.replace(/ /g, "_")}_${fechaFormateada.replace(/\//g, "-")}.pdf`;
 
             // Actualizar el contenido del recibo
             document.getElementById('nombreCliente').textContent = nombre;
             document.getElementById('saldoAnterior').textContent = total.toFixed(2);
             document.getElementById('abono').textContent = abono.toFixed(2);
             document.getElementById('nuevoSaldo').textContent = nuevoSaldo.toFixed(2);
+            document.getElementById('fecha').textContent = fechaFormateada;
 
             // Mostrar el recibo antes de generar el PDF
             document.getElementById('recibo').style.display = 'block';
 
-            // Generar el PDF con html2canvas y jsPDF
-            html2canvas(document.querySelector("#recibo"), {
-                useCORS: true, // Permite cargar imágenes externas sin problemas de CORS
-                scale: 2 // Aumenta la calidad de la imagen en el PDF
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: [80, 150] // Ajustar tamaño del PDF
+            // Usar la URL de la imagen desde GitHub
+            const imagenRecibo = document.getElementById('imagenRecibo');
+            imagenRecibo.src = "https://raw.githubusercontent.com/CGDevSolutions/prueba01/main/Horizontal_V1.png";
+
+            // Asegurarse de que la imagen esté cargada antes de generar el PDF
+            imagenRecibo.onload = () => {
+                html2canvas(document.querySelector("#recibo"), {
+                    useCORS: true, // Permite cargar imágenes externas sin problemas de CORS
+                    scale: 2 // Aumenta la calidad de la imagen en el PDF
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: [80, 150] // Ajustar tamaño del PDF
+                    });
+
+                    pdf.addImage(imgData, 'PNG', 5, 5, 70, 90); // Ajustar imagen en el PDF
+                    pdf.save(nombreArchivo); // Guardar con nombre personalizado
+
+                    // Ocultar el recibo después de generar el PDF
+                    document.getElementById('recibo').style.display = 'none';
+                }).catch(error => {
+                    console.error("Error al generar el PDF:", error);
+                    alert("Hubo un error al generar el PDF. Revisa la consola para más detalles.");
                 });
+            };
 
-                pdf.addImage(imgData, 'PNG', 5, 5, 70, 90); // Ajustar imagen en el PDF
-                pdf.save(nombreArchivo); // Guardar con nombre personalizado
-
-                // Ocultar el recibo después de generar el PDF
-                document.getElementById('recibo').style.display = 'none';
-            }).catch(error => {
-                console.error("Error al generar el PDF:", error);
-                alert("Hubo un error al generar el PDF. Revisa la consola para más detalles.");
-            });
+            // Si la imagen ya está cargada, generar el PDF inmediatamente
+            if (imagenRecibo.complete) {
+                imagenRecibo.onload();
+            }
         }
     </script>
 
