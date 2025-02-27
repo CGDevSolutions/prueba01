@@ -183,10 +183,11 @@
                     const pdf = new jsPDF({
                         orientation: 'portrait',
                         unit: 'mm',
-                        format: [80, 150] // Ajustar tamaño del PDF
+                        format: [100, 200] // Aumentamos el tamaño del PDF para que quepa el contenido
                     });
 
-                    pdf.addImage(imgData, 'PNG', 5, 5, 70, 90); // Ajustar imagen en el PDF
+                    // Cambiar el tamaño de la imagen en el PDF para que no se corte
+                    pdf.addImage(imgData, 'PNG', 10, 15, 80, 180); // Ajustamos el tamaño de la imagen para evitar que se corte
                     pdf.save(nombreArchivo); // Guardar con nombre personalizado
 
                     // Ocultar el recibo después de generar el PDF
