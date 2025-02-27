@@ -116,8 +116,8 @@
     <!-- Estructura del recibo -->
     <div class="recibo" id="recibo" style="display: none;">
         <!-- Imagen en el recibo -->
-        <img src="Horizontal_V1.png" alt="Logo" id="imagenRecibo" style="width: 150px;">
-        <h2>CREDIEXPRESS</h2>
+        <img src="Horizontal_V1.png" alt="Logo" id="imagenRecibo" style="width: 250px;">
+       
         <p><strong>Fecha:</strong> <span id="fecha"></span></p>
         <p><strong>Nombre del Cliente:</strong> <span id="nombreCliente"></span></p>
         <p><strong>Saldo Anterior:</strong> $<span id="saldoAnterior"></span></p>
@@ -183,11 +183,11 @@
                     const pdf = new jsPDF({
                         orientation: 'portrait',
                         unit: 'mm',
-                        format: [100, 200] // Aumentamos el tamaño del PDF para que quepa el contenido
+                        format: [200, 300] // Aumentamos el tamaño del PDF para que quepa el contenido
                     });
 
-                    // Cambiar el tamaño de la imagen en el PDF para que no se corte
-                    pdf.addImage(imgData, 'PNG', 10, 15, 80, 180); // Ajustamos el tamaño de la imagen para evitar que se corte
+                    // Aumentamos el tamaño de la imagen en el PDF
+                    pdf.addImage(imgData, 'PNG', 10, 10, 180, 300); // Aumentamos el tamaño de la imagen
                     pdf.save(nombreArchivo); // Guardar con nombre personalizado
 
                     // Ocultar el recibo después de generar el PDF
@@ -207,3 +207,4 @@
 
 </body>
 </html>
+
