@@ -63,9 +63,9 @@
         <p><strong>Fecha:</strong> <span id="fecha"></span></p>
         <p><strong>Hora:</strong> <span id="hora"></span></p>
         <p><strong>Nombre del Cliente:</strong> <span id="nombreCliente"></span></p>
-        <p><strong>Saldo Anterior:</strong> $<span id="saldoAnterior"></span></p>
+
         <p><strong>Abono:</strong> $<span id="abono"></span></p>
-        <p><strong>Nuevo Saldo:</strong> $<span id="nuevoSaldo"></span></p>
+
         <p><strong>Número total de cuotas:</strong> <span id="n_cuota_display"></span></p>
         <p><strong>Cuotas pagadas:</strong> <span id="cuota_pagar_display"></span></p>
         <hr>
@@ -86,7 +86,7 @@
             const abono = parseFloat(document.getElementById('abonoInput').value);
             const nCuota = document.getElementById('n_cuota').value;
             const cuotaPagada = document.getElementById('cuota_pagar').value;
-            const nuevoSaldo = total - abono;
+          
 
             // Validar entrada
             if (!nombre || isNaN(total) || isNaN(abono) || isNaN(nCuota) || isNaN(cuotaPagada)) {
@@ -111,9 +111,7 @@
 
             // Actualizar contenido del recibo
             document.getElementById('nombreCliente').textContent = nombre;
-            document.getElementById('saldoAnterior').textContent = total.toFixed(2);
             document.getElementById('abono').textContent = abono.toFixed(2);
-            document.getElementById('nuevoSaldo').textContent = nuevoSaldo.toFixed(2);
             document.getElementById('fecha').textContent = fechaActual;
             document.getElementById('hora').textContent = horaActual;
             document.getElementById('n_cuota_display').textContent = nCuota;
